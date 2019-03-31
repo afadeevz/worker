@@ -13,6 +13,7 @@ type workerImpl struct {
 func newWorker(contextChan <-chan *context) worker {
 	return &workerImpl{
 		contextChan: contextChan,
+		stopChan:    make(chan struct{}),
 	}
 }
 

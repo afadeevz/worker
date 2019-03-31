@@ -12,11 +12,11 @@ type pool struct {
 	contextChan chan *context
 }
 
-func NewPool(size int) Pool {
+func NewPool(size PoolSize) Pool {
 	contextChan := make(chan *context)
 
 	pool := pool{
-		workers:     make([]worker, size),
+		workers:     make([]worker, size.getWorkersCount()),
 		contextChan: contextChan,
 	}
 

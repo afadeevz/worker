@@ -1,7 +1,6 @@
 package worker
 
 type FutureError interface {
-	Resolve(err error)
 	Get() error
 }
 
@@ -9,7 +8,7 @@ type futureError struct {
 	result chan error
 }
 
-func newFutureError() FutureError {
+func newFutureError() *futureError {
 	return &futureError{
 		result: make(chan error, 1),
 	}

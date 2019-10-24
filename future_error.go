@@ -1,25 +1,32 @@
 package worker
 
+import (
+	"github.com/AlexanderFadeev/future"
+)
+
 type FutureError interface {
 	Get() error
 }
 
 type futureError struct {
-	result chan error
+	impl future.Resolver
 }
 
 func newFutureError() *futureError {
 	return &futureError{
-		result: make(chan error, 1),
+		impl: future.NewFuture(),
 	}
 }
 
 func (f *futureError) Resolve(err error) {
-	f.result <- err
+	f.impl.Resolve(err)
 }
 
 func (f *futureError) Get() error {
-	result := <-f.result
-	f.result <- result
-	return result
+	switch val := f.impl.Value(); val {
+	case nil:
+		return nil
+	default:
+		return val.(error)
+	}
 }

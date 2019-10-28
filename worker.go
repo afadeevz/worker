@@ -33,8 +33,8 @@ func (w *workerImpl) run() {
 }
 
 func (w *workerImpl) runJob(ctx *context) {
-	err := ctx.job.Run()
-	ctx.futureError.Resolve(err)
+	val, err := ctx.job.Run()
+	ctx.futureValue.Resolve(val, err)
 }
 
 func (w *workerImpl) stop() {

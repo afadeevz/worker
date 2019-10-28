@@ -1,10 +1,13 @@
 package worker
 
-import "github.com/AlexanderFadeev/myerrors"
+import (
+	"github.com/AlexanderFadeev/future"
+)
 
 type Pool interface {
-	StartJob(Job) FutureError
-	RunJobs(JobGenerator) error
+	StartJob(Job) future.Future
+	RunJob(Job) (interface{}, error)
+	RunJobs(JobGenerator) ([]interface{}, error)
 
 	Start()
 	Stop()
@@ -30,31 +33,39 @@ func NewPool(size PoolSize) Pool {
 	return &pool
 }
 
-func (p *pool) StartJob(job Job) FutureError {
-	futureError := newFutureError()
+func (p *pool) StartJob(job Job) future.Future {
+	f := future.NewValue()
 
 	p.contextChan <- &context{
 		job:         job,
-		futureError: futureError,
+		futureValue: f,
 	}
 
-	return futureError
+	return f
 }
 
-func (p *pool) RunJobs(jg JobGenerator) error {
-	var futureErrs []FutureError
+func (p *pool) RunJob(job Job) (interface{}, error) {
+	return p.StartJob(job).Wait()
+}
+
+func (p *pool) RunJobs(jg JobGenerator) (results []interface{}, err error) {
+	var futures []future.Future
 
 	for job := jg.GetJob(); job != nil; job = jg.GetJob() {
-		futureErr := p.StartJob(job)
-		futureErrs = append(futureErrs, futureErr)
+		f := p.StartJob(job)
+		futures = append(futures, f)
 	}
 
-	var err error
-	for _, fErr := range futureErrs {
-		err = myerrors.Merge(err, fErr.Get())
+	for _, f := range futures {
+		val, err := f.Wait()
+		if err != nil {
+			return nil, err
+		}
+
+		results = append(results, val)
 	}
 
-	return err
+	return
 }
 
 func (p *pool) Start() {

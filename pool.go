@@ -14,20 +14,23 @@ type Pool interface {
 }
 
 type pool struct {
-	workers     []worker
+	workers     []*worker
 	contextChan chan *context
+	stopChan    chan struct{}
 }
 
 func NewPool(size PoolSize) Pool {
 	contextChan := make(chan *context)
+	stopChan := make(chan struct{})
 
 	pool := pool{
-		workers:     make([]worker, size.getWorkersCount()),
+		workers:     make([]*worker, size.getWorkersCount()),
 		contextChan: contextChan,
+		stopChan:    stopChan,
 	}
 
 	for index := range pool.workers {
-		pool.workers[index] = newWorker(contextChan)
+		pool.workers[index] = newWorker(contextChan, stopChan)
 	}
 
 	return &pool
@@ -70,12 +73,12 @@ func (p *pool) RunJobs(jg JobGenerator) (results []interface{}, err error) {
 
 func (p *pool) Start() {
 	for _, worker := range p.workers {
-		worker.start()
+		go worker.run()
 	}
 }
 
 func (p *pool) Stop() {
-	for _, worker := range p.workers {
-		worker.stop()
+	for range p.workers {
+		p.stopChan <- struct{}{}
 	}
 }

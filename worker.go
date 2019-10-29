@@ -1,27 +1,18 @@
 package worker
 
-type worker interface {
-	start()
-	stop()
-}
-
-type workerImpl struct {
+type worker struct {
 	contextChan <-chan *context
 	stopChan    chan struct{}
 }
 
-func newWorker(contextChan <-chan *context) worker {
-	return &workerImpl{
+func newWorker(contextChan <-chan *context, stopChan chan struct{}) *worker {
+	return &worker{
 		contextChan: contextChan,
-		stopChan:    make(chan struct{}),
+		stopChan:    stopChan,
 	}
 }
 
-func (w *workerImpl) start() {
-	go w.run()
-}
-
-func (w *workerImpl) run() {
+func (w *worker) run() {
 	for {
 		select {
 		case ctx := <-w.contextChan:
@@ -32,11 +23,7 @@ func (w *workerImpl) run() {
 	}
 }
 
-func (w *workerImpl) runJob(ctx *context) {
+func (w *worker) runJob(ctx *context) {
 	val, err := ctx.job.Run()
 	ctx.futureValue.Resolve(val, err)
-}
-
-func (w *workerImpl) stop() {
-	w.stopChan <- struct{}{}
 }

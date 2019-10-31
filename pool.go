@@ -15,8 +15,8 @@ type Pool interface {
 
 type pool struct {
 	workers     []*worker
-	contextChan chan *context
-	stopChan    chan struct{}
+	contextChan chan<- *context
+	stopChan    chan<- struct{}
 }
 
 func NewPool(size PoolSize) Pool {

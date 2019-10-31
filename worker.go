@@ -2,10 +2,10 @@ package worker
 
 type worker struct {
 	contextChan <-chan *context
-	stopChan    chan struct{}
+	stopChan    <-chan struct{}
 }
 
-func newWorker(contextChan <-chan *context, stopChan chan struct{}) *worker {
+func newWorker(contextChan <-chan *context, stopChan <-chan struct{}) *worker {
 	return &worker{
 		contextChan: contextChan,
 		stopChan:    stopChan,

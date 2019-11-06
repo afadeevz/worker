@@ -1,5 +1,7 @@
 github.com/AlexanderFadeev/future v0.0.0 h1:Y+HeuKCdi0ZQobE75h8x18SX3IFrzBGHs+94/YBxyLI=
 github.com/AlexanderFadeev/future v0.0.0/go.mod h1:x3sDUuwS5l+1eJYjhMdRjXcwZkpxTDezPK+16/1ExLk=
+github.com/AlexanderFadeev/future v1.0.0 h1:0qiPhws13BtfMsW3EVTzcT9BkCUQaavLiq965qJrbYs=
+github.com/AlexanderFadeev/future v1.0.0/go.mod h1:x3sDUuwS5l+1eJYjhMdRjXcwZkpxTDezPK+16/1ExLk=
 github.com/AlexanderFadeev/lock v0.0.0-20191028093240-37ad337f6821 h1:YWmaStOAtI/RLNrsCkf9C5sESx2A3RW0Q1ha8bVqYhk=
 github.com/AlexanderFadeev/lock v0.0.0-20191028093240-37ad337f6821/go.mod h1:i+vE8JsFucbmjaOAbdQn/xEbrasjLTF1YHT2jMDNMdU=
 github.com/AlexanderFadeev/myerrors v1.1.1 h1:iAk0L8RRXPbnQFgWzJd5qetuOwcRmlneBHugQ87E84A=

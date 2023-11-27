@@ -1,76 +1,46 @@
 package worker
 
-import (
-	"github.com/AlexanderFadeev/future"
-)
+import "github.com/AlexanderFadeev/future/v2"
 
-type Pool interface {
-	StartJob(Job) future.Future
-	RunJob(Job) (interface{}, error)
-	RunJobs(JobGenerator) ([]interface{}, error)
-
-	Start()
+type Pool[T any] interface {
+	RunJob(Job[T]) (T, error)
 	Stop()
 }
 
-type pool struct {
-	workersCount int
-	funcChan     chan func()
+type pool[T any] struct {
+	funcChan chan func()
 }
 
-func NewPool(size PoolSize) Pool {
-	return &pool{
-		workersCount: size.getWorkersCount(),
-	}
-}
-
-func (p *pool) StartJob(job Job) future.Future {
-	f := future.NewValue()
-
-	p.funcChan <- func() {
-		f.Resolve(job.Run())
+func NewPool[T any](size PoolSize) Pool[T] {
+	p := &pool[T]{
+		funcChan: make(chan func()),
 	}
 
-	return f
-}
-
-func (p *pool) RunJob(job Job) (interface{}, error) {
-	return p.StartJob(job).Wait()
-}
-
-func (p *pool) RunJobs(jg JobGenerator) (results []interface{}, err error) {
-	var futures []future.Future
-
-	for job := jg.GetJob(); job != nil; job = jg.GetJob() {
-		f := p.StartJob(job)
-		futures = append(futures, f)
-	}
-
-	for _, f := range futures {
-		val, err := f.Wait()
-		if err != nil {
-			return nil, err
-		}
-
-		results = append(results, val)
-	}
-
-	return
-}
-
-func (p *pool) Start() {
-	p.funcChan = make(chan func())
-	for i := 0; i < p.workersCount; i++ {
+	for i := 0; i < size.getWorkersCount(); i++ {
 		go p.runWorker()
 	}
+
+	return p
 }
 
-func (p *pool) Stop() {
+func (p *pool[T]) Stop() {
 	close(p.funcChan)
 }
 
-func (p *pool) runWorker() {
+func (p *pool[T]) runWorker() {
 	for fn := range p.funcChan {
 		fn()
 	}
+}
+
+func (p *pool[T]) RunJob(job Job[T]) (result T, err error) {
+	w := future.NewWaiter()
+
+	p.funcChan <- func() {
+		defer w.Done()
+		result, err = job.Run()
+	}
+
+	w.Wait()
+	return
 }

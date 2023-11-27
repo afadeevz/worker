@@ -1,7 +1,5 @@
-github.com/AlexanderFadeev/future v0.0.0 h1:Y+HeuKCdi0ZQobE75h8x18SX3IFrzBGHs+94/YBxyLI=
-github.com/AlexanderFadeev/future v0.0.0/go.mod h1:x3sDUuwS5l+1eJYjhMdRjXcwZkpxTDezPK+16/1ExLk=
-github.com/AlexanderFadeev/future v1.0.0 h1:0qiPhws13BtfMsW3EVTzcT9BkCUQaavLiq965qJrbYs=
-github.com/AlexanderFadeev/future v1.0.0/go.mod h1:x3sDUuwS5l+1eJYjhMdRjXcwZkpxTDezPK+16/1ExLk=
+github.com/AlexanderFadeev/future/v2 v2.0.0 h1:pbBxWKmPpD1gJdsKbjBaMMIjfPaSFaegKkdy+NXYW+s=
+github.com/AlexanderFadeev/future/v2 v2.0.0/go.mod h1:GJmZq3B1u8JCvxLY/9hTIJeaovQHD9+eb/KBqxYtJYU=
 github.com/AlexanderFadeev/lock v0.0.0-20191028093240-37ad337f6821 h1:YWmaStOAtI/RLNrsCkf9C5sESx2A3RW0Q1ha8bVqYhk=
 github.com/AlexanderFadeev/lock v0.0.0-20191028093240-37ad337f6821/go.mod h1:i+vE8JsFucbmjaOAbdQn/xEbrasjLTF1YHT2jMDNMdU=
 github.com/AlexanderFadeev/myerrors v1.1.1 h1:iAk0L8RRXPbnQFgWzJd5qetuOwcRmlneBHugQ87E84A=
@@ -13,8 +11,6 @@ github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINE
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
-github.com/stretchr/testify v1.3.0 h1:TivCn/peBQ7UY8ooIcPgZFpTNSz0Q2U6UrFlUfqbe0Q=
-github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
 github.com/stretchr/testify v1.4.0 h1:2E4SXV/wtOkTonXsotYi4li6zVWxYlZuYNCXe9XRJyk=
 github.com/stretchr/testify v1.4.0/go.mod h1:j7eGeouHqKxXV5pUuKE4zz7dFj8WfuZ+81PSLYec5m4=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405 h1:yhCVgyC4o1eVCa2tZl7eS0r+SDo693bJlVdllGtEeKM=

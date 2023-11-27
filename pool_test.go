@@ -1,43 +1,39 @@
 package worker
 
 import (
-	"github.com/AlexanderFadeev/future"
+	"testing"
+
 	"github.com/AlexanderFadeev/lock"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 type job struct {
 	value lock.Value
 }
 
-func (j *job) Run() (interface{}, error) {
+func (j *job) Run() (int, error) {
 	value := j.value.Lock()
 	defer value.Unlock()
 
 	value.Set(value.Get().(int) + 1)
-	return nil, nil
+	return 0, nil
 }
 
 func TestPool(t *testing.T) {
-	pool := NewPool(16)
-	pool.Start()
+	pool := NewPool[int](16)
 	defer pool.Stop()
 
 	j := &job{
 		value: lock.NewValue(0),
 	}
 
-	var futures []future.Future
 	for i := 0; i < 100; i++ {
-		f := pool.StartJob(j)
-		futures = append(futures, f)
+		go func() {
+			val, err := pool.RunJob(j)
+			assert.Equal(t, 0, val)
+			assert.Nil(t, err)
+		}()
 	}
 
-	for _, f := range futures {
-		val, err := f.Wait()
-		assert.Nil(t, val)
-		assert.Nil(t, err)
-	}
-	assert.Equal(t, j.value.Lock().Get(), 100)
+	assert.Equal(t, 100, j.value.Lock().Get())
 }

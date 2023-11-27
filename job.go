@@ -1,11 +1,11 @@
 package worker
 
-type Job interface {
-	Run() (interface{}, error)
+type Job[T any] interface {
+	Run() (T, error)
 }
 
-type Func func() (interface{}, error)
+type Func[T any] func() (T, error)
 
-func (f Func) Run() (interface{}, error) {
+func (f Func[T]) Run() (T, error) {
 	return f()
 }

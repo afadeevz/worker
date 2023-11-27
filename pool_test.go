@@ -1,6 +1,7 @@
 package worker
 
 import (
+	"sync"
 	"testing"
 
 	"github.com/AlexanderFadeev/lock"
@@ -27,13 +28,18 @@ func TestPool(t *testing.T) {
 		value: lock.NewValue(0),
 	}
 
-	for i := 0; i < 100; i++ {
+	const n = 100
+	var wg sync.WaitGroup
+	wg.Add(n)
+	for i := 0; i < n; i++ {
 		go func() {
+			defer wg.Done()
 			val, err := pool.RunJob(j)
 			assert.Equal(t, 0, val)
 			assert.Nil(t, err)
 		}()
 	}
+	wg.Wait()
 
 	assert.Equal(t, 100, j.value.Lock().Get())
 }

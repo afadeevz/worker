@@ -1,4 +1,4 @@
-module github.com/afadeevz/worker
+module github.com/afadeevz/worker/v2
 
 go 1.21.4
 
